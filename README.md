@@ -1,2 +1,2 @@
 # DetaNet-MD
-A universal machine learning force field framework
+A Universal Deep Learning Force Field for Molecular Dynamic Simulation and Vibrational Spectra Prediction

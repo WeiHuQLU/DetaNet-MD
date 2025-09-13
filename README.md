@@ -35,7 +35,7 @@ You can open and run the training scripts using Jupyter Notebook:
 ```bash
  jupyter notebook DetaNet-MD/training/training_models/train_energy.ipynb
 ```
-The **trained models** are stored in:
+The trained models are stored in:
 
 - `DetaNet-MD/training/training_parameters/QMe14S/`
   

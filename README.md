@@ -69,4 +69,14 @@ Run with Jupyter Notebook:
 ```bash
 jupyter notebook DetaNet-MD/rpmd/example_2/run_rpmd.ipynb
 
+These examples demonstrate how to connect **i-PI** to client codes using **ASE** as a middleware.  
+Two possible configurations are available:
 
+- **Option A:** i-PI (server) ⟷ ASE (client) ⟷ Force code  
+
+**Example script:**  
+`DetaNet-MD/rpmd/example_1/run.sh`  
+
+**Run on a cluster with:**
+```bash
+sbatch run.sh

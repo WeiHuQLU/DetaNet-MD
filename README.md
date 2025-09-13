@@ -38,4 +38,15 @@ You can open and run the training scripts using Jupyter Notebook:
 The **trained models** are stored in:
 
 - `DetaNet-MD/training/training_parameters/QMe14S/`
+
+### Training
+
+#### Transfer Learning (迁移学习)
+
+Before training, the pre-trained model parameters in  
+`DetaNet-MD/training/training_parameters/QMe14S/`  
+should be loaded. For **organic and inorganic crystals**, **molecular aggregates**, and **polypeptides**, we selected **2,000 configurations** for training each system.
+  
+
+####   
 ### MD and RPMD Simulations

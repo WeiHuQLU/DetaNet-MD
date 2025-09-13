@@ -16,6 +16,11 @@ DetaNet-MD is a machine learning molecular dynamics framework that integrates th
 ### Prepare data
 #### QMe14S Dataset 
 We trained DetaNet on [QMe14S](https://figshare.com/s/889262a4e999b5c9a5b3) to obtain a universal force field. The QMe14S dataset includes energy, force, dipole moment, and polarizability for 186,102 small isolated organic molecules, covering both equilibrium and nonequilibrium configurations sampled using atom-centered density matrix propagation (ADMP) with the Gaussian 16 package. We randomly split the QMe14S dataset into training, validation, and test sets with percentages of 90%, 5%, and 5%, respectively.
+#### Other Datasets 
+We evaluated the transferability of the DetaNet model to diverse and complex systems, including organic and inorganic crystals, molecular aggregates, and polypeptides.  
+The datasets used for transfer learning, based on the QMe14S pre-trained model, are available at:  
+[https://figshare.com/account/items/30111256/edit](https://figshare.com/account/items/30111256/edit)
+
 ### Training
 The training scripts for different properties are provided in the `DetaNet-MD/training/training_models` directory:
 
@@ -30,4 +35,7 @@ You can open and run the training scripts using Jupyter Notebook:
 ```bash
  jupyter notebook DetaNet-MD/training/training_models/train_energy.ipynb
 ```
+The **trained models** are stored in:
+
+- `DetaNet-MD/training/training_parameters/QMe14S/`
 ### MD and RPMD Simulations

@@ -47,7 +47,7 @@ The models obtained from transfer learning are stored in:
   
 ### MD and RPMD Simulations
 
-This package enables **molecular dynamics (MD)** and **ring polymer molecular dynamics (RPMD)** simulations through interfaces between **DetaNet** and external frameworks such as **SchnetPack**, **ASE**, **i-PI**, and **torchmd-net**.
+This package enables molecular dynamics (MD) and ring polymer molecular dynamics (RPMD) simulations through interfaces between DetaNet and external frameworks such as SchnetPack, ASE, i-PI, and torchmd-net.
 
 #### MD Simulations
 The MD example script is provided in:  
@@ -62,21 +62,22 @@ jupyter notebook DetaNet-MD/md/example/run_md.ipynb
 Two approaches are available for running RPMD:
 
 ##### 1. Via SchNetPack interface
+
 Example script:  
 `DetaNet-MD/rpmd/example_2/run_rpmd.ipynb`  
 
 Run with Jupyter Notebook:
 ```bash
 jupyter notebook DetaNet-MD/rpmd/example_2/run_rpmd.ipynb
+```
+##### 2. Via ASE and i-PI interface
+These examples demonstrate how to connect i-PI to client codes using ASE as a middleware.  
 
-These examples demonstrate how to connect **i-PI** to client codes using **ASE** as a middleware.  
-Two possible configurations are available:
+- i-PI (server) ⟷ ASE (client) ⟷ DetNet-Force code  
 
-- **Option A:** i-PI (server) ⟷ ASE (client) ⟷ Force code  
-
-**Example script:**  
+Example script:  
 `DetaNet-MD/rpmd/example_1/run.sh`  
 
-**Run on a cluster with:**
+Run on a cluster with:
 ```bash
 sbatch run.sh

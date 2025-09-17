@@ -19,7 +19,7 @@ We trained DetaNet on [QMe14S](https://figshare.com/s/889262a4e999b5c9a5b3) to o
 #### Other Datasets 
 We evaluated the transferability of the DetaNet model to diverse and complex systems, including organic and inorganic crystals, molecular aggregates, and polypeptides.  
 The datasets used for transfer learning, based on the QMe14S pre-trained model, are available at:  
-[https://figshare.com/account/items/30111256/edit](https://figshare.com/account/items/30111256/edit)
+[https://figshare.com/s/043b1ace6546b4221a43](https://figshare.com/s/043b1ace6546b4221a43)
 
 ### Training
 The training scripts for different properties are provided in the `DetaNet-MD/training/training_models` directory:
@@ -81,11 +81,13 @@ Example script:
 Run on a cluster with:
 ```bash
 sbatch run.sh
+```
 #### Calculation of IR and Raman spectra
 Example script:  
-`DetaNet-MD/rpmd/example_2/run_rpmd.ipynb`  
+`DetaNet-MD/md/example/calculated_spectra.ipynb`  
 
 Run with Jupyter Notebook:
 ```bash
-jupyter notebook DetaNet-MD/rpmd/example_2/run_rpmd.ipynb
+jupyter notebook DetaNet-MD/md/example/calculated_spectra.ipynb
 ```
+Example data for spectra calculation is available at: https://figshare.com/s/043b1ace6546b4221a43

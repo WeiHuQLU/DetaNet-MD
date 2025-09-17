@@ -82,7 +82,7 @@ Run on a cluster with:
 ```bash
 sbatch run.sh
 ```
-#### Calculation of IR and Raman spectra
+### Calculation of IR and Raman spectra
 Example script:  
 `DetaNet-MD/md/example/calculated_spectra.ipynb`  
 

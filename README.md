@@ -81,3 +81,11 @@ Example script:
 Run on a cluster with:
 ```bash
 sbatch run.sh
+#### Calculation of IR and Raman spectra
+Example script:  
+`DetaNet-MD/rpmd/example_2/run_rpmd.ipynb`  
+
+Run with Jupyter Notebook:
+```bash
+jupyter notebook DetaNet-MD/rpmd/example_2/run_rpmd.ipynb
+```

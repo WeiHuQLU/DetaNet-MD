@@ -2,8 +2,11 @@
 ## Introduction
 DetaNet-MD is a machine learning molecular dynamics framework that integrates the DetaNet model with velocity-Verlet and RPMD to simulate dynamic infrared and Raman spectra. It provides an efficient and transferable solution for real-time prediction of vibrational spectra across diverse molecular and material systems.
 ## System requirements
-The development version of the package has been tested on Linux operating systems.
+The development version of the package has been tested on CentOS Linux 7 (Core).
 ## Installation guide
+
+We recommend using [Miniforge](https://github.com/conda-forge/miniforge/) instead of Anaconda to download and manage the installation packages.
+
 - pytorch=2.4.1  
 - pytorch-lightning=2.5.0  
 - pytorch_geometric=2.1.0  
@@ -14,6 +17,25 @@ The development version of the package has been tested on Linux operating system
 - ase=3.24.0  
 - schnetpack=2.1.1  
 - ipi=3.1  
+
+### Example of environment setup
+
+Create a new environment and install the required dependencies:
+
+```bash
+# Create and activate a conda environment
+conda create -n detanet-md python=3.9
+conda activate detanet-md
+
+# Install PyTorch (CPU version example)
+conda install pytorch=2.4.1 pytorch-lightning=2.5.0 -c pytorch -c conda-forge
+
+# Install PyTorch Geometric and related packages
+conda install pytorch_geometric=2.1.0 pytorch_scatter=2.1.2 pytorch_sparse=0.6.18 -c pyg -c conda-forge
+
+# Install remaining dependencies
+conda install e3nn=0.5.5 torchmd-net=2.4.0 ase=3.24.0 schnetpack=2.1.1 ipi=3.1 -c conda-forge
+```
 ## Demo
 ### Prepare data
 #### QMe14S Dataset 

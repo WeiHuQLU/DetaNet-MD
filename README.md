@@ -1,7 +1,9 @@
 # DetaNet-MD
 ## Introduction
 DetaNet-MD is a machine learning molecular dynamics framework that integrates the DetaNet model with velocity-Verlet and RPMD to simulate dynamic infrared and Raman spectra. It provides an efficient and transferable solution for real-time prediction of vibrational spectra across diverse molecular and material systems.
-## Requirements 
+## System requirements
+The development version of the package has been tested on Linux operating systems.
+## Installation guide
 - pytorch=2.4.1  
 - pytorch-lightning=2.5.0  
 - pytorch_geometric=2.1.0  
@@ -12,7 +14,7 @@ DetaNet-MD is a machine learning molecular dynamics framework that integrates th
 - ase=3.24.0  
 - schnetpack=2.1.1  
 - ipi=3.1  
-## How to Use DetaNet-MD Package
+## Demo
 ### Prepare data
 #### QMe14S Dataset 
 We trained DetaNet on [QMe14S](https://figshare.com/s/889262a4e999b5c9a5b3) to obtain a universal force field. The QMe14S dataset includes energy, force, dipole moment, and polarizability for 186,102 small isolated organic molecules, covering both equilibrium and nonequilibrium configurations sampled using atom-centered density matrix propagation (ADMP) with the Gaussian 16 package. We randomly split the QMe14S dataset into training, validation, and test sets with percentages of 90%, 5%, and 5%, respectively.

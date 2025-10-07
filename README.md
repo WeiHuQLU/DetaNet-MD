@@ -24,17 +24,17 @@ Create a new environment and install the required dependencies:
 
 ```bash
 # Create and activate a conda environment
-conda create -n detanet-md python=3.9
+conda create -n detanet-md 
 conda activate detanet-md
 
-# Install PyTorch (CPU version example)
-conda install pytorch=2.4.1 pytorch-lightning=2.5.0 -c pytorch -c conda-forge
+# Install PyTorch 
+conda install pytorch=2.4.1 pytorch-lightning=2.5.0 
 
-# Install PyTorch Geometric and related packages
-conda install pytorch_geometric=2.1.0 pytorch_scatter=2.1.2 pytorch_sparse=0.6.18 -c pyg -c conda-forge
+# Install related packages
+conda install pytorch_geometric=2.1.0 pytorch_scatter=2.1.2 pytorch_sparse=0.6.18 torchmd-net=2.4.0
 
 # Install remaining dependencies
-conda install e3nn=0.5.5 torchmd-net=2.4.0 ase=3.24.0 schnetpack=2.1.1 ipi=3.1 -c conda-forge
+pip install e3nn==0.5.5 ase==3.24.0 schnetpack==2.1.1 ipi==3.1 
 ```
 ## Demo
 ### Prepare data

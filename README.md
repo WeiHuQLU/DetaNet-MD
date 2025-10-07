@@ -36,6 +36,8 @@ conda install pytorch_geometric=2.1.0 pytorch_scatter=2.1.2 pytorch_sparse=0.6.1
 # Install remaining dependencies
 pip install e3nn==0.5.5 ase==3.24.0 schnetpack==2.1.1 ipi==3.1 
 ```
+Typical installation time on a "normal" desktop computer is approximately 1.5 hours.
+
 ## Demo
 ### Prepare data
 #### QMe14S Dataset 

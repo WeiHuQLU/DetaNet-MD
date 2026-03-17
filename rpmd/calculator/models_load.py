@@ -1,6 +1,35 @@
 import torch
 import os
 from detanet_model.detanet_pbc import DetaNet
+def model_force_energy (params='D:\My_code\detanet\\trained_param\qm12\\force.pth',device:torch.device=torch.device('cuda')):
+
+    model_force = DetaNet(num_features=128,
+                          act='swish',
+                          maxl=3,
+                          num_block=3,
+                          radial_type='trainable_bessel',
+                          num_radial=64 , # qm7X,12   32
+                          attention_head=8,
+                          cutoff_lower=0.0,
+                         cutoff_upper=4.5,
+                         max_num_neighbors=120,
+                         check_errors=True,
+                         box_vecs=None,
+                          dropout=0.0,
+                          use_cutoff=False,
+                          max_atomic_number=35,  # qm7X,12   17
+                          atom_ref=None,
+                          scale=1.0,
+                          scalar_outsize=1,
+                          irreps_out=None,
+                          summation=True,
+                          norm=False,
+                          out_type='scalar',
+                          grad_type='force',
+                          device=device)
+    force_energy_trained_params = torch.load(params,map_location=device)
+    model_force.load_state_dict(state_dict=force_energy_trained_params)
+    return model_force_energy
 def model_force (params='D:\My_code\detanet\\trained_param\qm12\\force.pth',device:torch.device=torch.device('cuda')):
 
     model_force = DetaNet(num_features=128,

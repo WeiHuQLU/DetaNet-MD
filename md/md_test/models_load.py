@@ -26,7 +26,7 @@ def model_force_energy (params='D:\My_code\detanet\\trained_param\qm12\\force_en
                           device=device)
     model_force_energy_trained_params = torch.load(params)
     model_force.load_state_dict(state_dict=model_force_energy_trained_params)
-    return model_force
+    return model_force_energy
 def model_force (params='D:\My_code\detanet\\trained_param\qm12\\force.pth',device:torch.device=torch.device('cuda')):
 
     model_force = DetaNet(num_features=128,

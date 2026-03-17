@@ -25,7 +25,7 @@ def model_force_energy (params='D:\My_code\detanet\\trained_param\qm12\\force.pt
                           summation=True,
                           norm=False,
                           out_type='scalar',
-                          grad_type='force',
+                          grad_type='ef',
                           device=device)
     force_energy_trained_params = torch.load(params,map_location=device)
     model_force.load_state_dict(state_dict=force_energy_trained_params)

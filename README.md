@@ -49,7 +49,7 @@ The datasets used for transfer learning, based on the QMe14S pre-trained model, 
 
 ### Training
 The training scripts for different properties are provided in the `DetaNet-MD/training/training_models` directory:
-
+- `train_energy_and_force.ipynb` – joint training on energies and forces
 - `train_energy.ipynb` – training on energies  
 - `train_force.ipynb` – training on forces  
 - `train_dipole.ipynb` – training on dipole moments  

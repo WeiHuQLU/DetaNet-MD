@@ -1,7 +1,7 @@
 from ase.io import read
 import sys
 sys.path.append('/public/home/')
-from PIMD3.calculator.ase_calculator import ASEDetaNetCalculator
+from rpmd.calculator.ase_calculator import ASEDetaNetCalculator
 from ase.calculators.socketio import SocketClient
 from schnetpack.transform import ASENeighborList
 import torch

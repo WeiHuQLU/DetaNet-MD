@@ -2,7 +2,7 @@ import torch
 import os
 from detanet_model.detanet_pbc import DetaNet
 
-def model_force (params='D:\My_code\detanet\\trained_param\qm12\\force.pth',device:torch.device=torch.device('cuda')):
+def model_force_energy (params='D:\My_code\detanet\\trained_param\qm12\\force.pth',device:torch.device=torch.device('cuda')):
 
     model_force_energy = DetaNet(num_features=128,
                           act='swish',
@@ -136,7 +136,7 @@ def model_polar(params='D:\My_code\detanet\\trained_param\qm12\\polar.pth',devic
                           cutoff_lower=0.0,
                          cutoff_upper=3.5,
                          max_num_neighbors=120,
-                          strategy="cell",
+                          strategy="brute",
                          check_errors=True,
                          box_vecs=None,
                           dropout=0.0,

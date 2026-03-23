@@ -62,11 +62,11 @@ class  MolecularDynamics :
             energy_unit="eV",
             position_unit="Angstrom",
             neighbor_list=md_neighborlist,
-            energy_key=None,
+            energy_key=self.md_params["energy_key"],
             required_properties=self.md_params["required_properties"],
+            separate_energy_force=self.md_params["separate_energy_force"],
             device=torch.device(self.md_device)
         )
-
         # Nose-Hover chain thermostat
 
         # Set temperature and thermostat constant
@@ -197,14 +197,14 @@ class RPMolecularDynamics:
 
         self.rpmd_calculator = DetaNetCalculator(
             model_files,  # path to stored model
-            "forces",  # force key
+            "forces",  # force key  "forces"
             "eV",  # energy units
             "Angstrom",  # length units
             md_neighborlist,  # neighbor list
-            energy_key="energy",  # name of potential energies
-            required_properties=self.md_params["required_properties"],  # additional properties extracted from the model
-            device=torch.device(self.rpmd_device)
-        )
+            energy_key=self.md_params["energy_key"],
+            required_properties=self.md_params["required_properties"],
+            separate_energy_force=self.md_params["separate_energy_force"],
+            device=torch.device(self.rpmd_device))
         # Set temperature and thermostat constant
         bath_temperature = self.rpmd_params["bath_temperature"]
         time_constant =self.rpmd_params["time_constant"]

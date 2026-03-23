@@ -1,28 +1,33 @@
 from typing import Union, List, Dict
 from schnetpack.md.neighborlist_md import NeighborListMD
-import  torch
+import torch
 import numpy as np
 from schnetpack.model import AtomisticModel
 from schnetpack.md import System
 from schnetpack.md.calculators import SchNetPackCalculator
-from md.models_load import model_force,model_energy ,model_dipole ,model_polar  
+from md_dipole.models_load import model_force_energy, model_dipole, model_polar, model_energy, model_force
 import logging
 log = logging.getLogger(__name__)
+
+
 class DetaNetCalculator(SchNetPackCalculator):
     def __init__(self,
-                model_files: list[str],
-                force_key: str,
-                energy_unit: Union[str, float],
-                position_unit: Union[str, float],
-                neighbor_list: NeighborListMD,
-                energy_key: str = None,
-                stress_key: str = None,
-                required_properties: List = [],
-                property_conversion: Dict[str, Union[str, float]] = {},
-                script_model: bool = False,
-                device:torch.device=torch.device('cuda')
-                ):
-        self.device=device
+                 model_files: list[str],
+                 force_key: str,
+                 energy_unit: Union[str, float],
+                 position_unit: Union[str, float],
+                 neighbor_list: NeighborListMD,
+                 energy_key: str = None,
+                 stress_key: str = None,
+                 required_properties: List = [],
+                 property_conversion: Dict[str, Union[str, float]] = {},
+                 script_model: bool = False,
+                 separate_energy_force: bool = False,  
+                 device: torch.device = torch.device('cuda')):
+        self.device = device
+        self.separate_energy_force = separate_energy_force  
+        self.model_to_props = []  
+        
         super(DetaNetCalculator, self).__init__(
             model_file=model_files,
             required_properties=required_properties,
@@ -38,64 +43,85 @@ class DetaNetCalculator(SchNetPackCalculator):
         # Convert list of models to module list
         self.models = torch.nn.ModuleList(self.model)
         self.neighbor_list = neighbor_list
-        self.required_properties=required_properties
+        self.required_properties = required_properties
 
     def _prepare_model(self, model_files: List[str]) -> List[AtomisticModel]:
-        """
-        Load models corresponding to the required properties.
-    
-        Args:
-            model_files (List[str]): List of paths to model files. Must match required_properties.
-    
-        Returns:
-            List[AtomisticModel]: Loaded and prepared models.
-        """
-        # required_property -> model_loader 
-        model_loader_map = {
-            "forces": model_force,
-            "energy": model_energy,
-            "dipole_moment": model_dipole,
-            "polarizability": model_polar
-        }
-    
-        if len(model_files) != len(self.required_properties):
-            raise ValueError(f"Mismatch between number of model files ({len(model_files)}) and "
-                             f"required properties ({len(self.required_properties)}).")
-    
-        models_list = []
-        for prop, path in zip(self.required_properties, model_files):
-            if prop not in model_loader_map:
-                raise ValueError(f"Unknown property '{prop}' for model loading. Supported keys: {list(model_loader_map.keys())}")
-            model = model_loader_map[prop](path, self.device)
-            model.to(self.device)
-            model.eval()
-            models_list.append(model)
-    
-        return models_list
+  
+        load_models = []
+        file_idx = 0  
 
+        if "energy" in self.required_properties or "forces" in self.required_properties:
+            if not self.separate_energy_force:
+                m = model_force_energy(model_files[file_idx], self.device)
+                m.eval()
+                m.to(self.device)
+                load_models.append(m)
+                
+                current_props = []
+                if "energy" in self.required_properties:
+                    current_props.append(("energy", 0))
+                if "forces" in self.required_properties:
+                    current_props.append(("forces", 1))
+                self.model_to_props.append(current_props)
+                
+                file_idx += 1
+            else:
+                if "energy" in self.required_properties:
+                    m = model_energy(model_files[file_idx], self.device)
+                    m.eval()
+                    m.to(self.device)
+                    load_models.append(m)
+                    self.model_to_props.append([("energy", 0)])
+                    file_idx += 1
+                
+                if "forces" in self.required_properties:
+                    m = model_force(model_files[file_idx], self.device)
+                    m.eval()
+                    m.to(self.device)
+                    load_models.append(m)
+                    self.model_to_props.append([("forces", 0)])
+                    file_idx += 1
+
+        if "dipole_moment" in self.required_properties:
+            m = model_dipole(model_files[file_idx], self.device)
+            m.eval()
+            m.to(self.device)
+            load_models.append(m)
+            self.model_to_props.append([("dipole_moment", 0)])
+            file_idx += 1
+
+        if "polarizability" in self.required_properties:
+            m = model_polar(model_files[file_idx], self.device)
+            m.eval()
+            m.to(self.device)
+            load_models.append(m)
+            self.model_to_props.append([("polarizability", 0)])
+            file_idx += 1
+
+        return load_models
 
     def calculate(self, system: System):
-        """
-        Perform all calculations and compyte properties .
-
-        Args:
-            system (schnetpack.md.System): System from the molecular dynamics simulation.
-        """
 
         inputs = self._generate_input(system)
-        #cell models
-        numbers=inputs['_atomic_numbers']
-        positions=inputs['_positions']
+        numbers = inputs['_atomic_numbers']
+        positions = inputs['_positions']
         idx_m = inputs['_idx_m']
-        box=inputs['_cell']
-        if torch.any(inputs['_pbc']==False):
-            prediction = [model(z=numbers, pos=positions,box=None,batch=idx_m) for model in self.models]
-            
+        box = inputs['_cell']
+
+        if torch.any(inputs['_pbc'] == False):
+            prediction = [model(z=numbers, pos=positions, cell=None, batch=idx_m) for model in self.models]
         else:
-             prediction = [model(z=numbers, pos=positions,box=box,batch=idx_m) for model in self.models]
-        
-        self.results = {i: j for i, j in zip(self.required_properties, prediction)}
-       
+            prediction = [model(z=numbers, pos=positions, cell=box, batch=idx_m) for model in self.models]
+
+        self.results = {}
+        for pred, prop_info in zip(prediction, self.model_to_props):
+            for prop_name, pred_idx in prop_info:
+                if isinstance(pred, (tuple, list)):
+                    val = pred[pred_idx]
+                else:
+                    val = pred
+                self.results[prop_name] = val
+
         if 'forces' in self.results:
             self.results['forces'] = self.results['forces'].reshape(-1, 3)
           
@@ -103,33 +129,21 @@ class DetaNetCalculator(SchNetPackCalculator):
             self.results['energy'] = self.results['energy'].reshape(-1)
            
         if 'dipole_moment' in self.results:
-            self.results['dipole_moment']=self.results['dipole_moment'].reshape(-1)
+            self.results['dipole_moment'] = self.results['dipole_moment'].reshape(-1)
            
-          
-        if 'polarizability'in self.results:
-            self.results['polarizability']=self.results['polarizability'].reshape(-1,3)
+        if 'polarizability' in self.results:
+            self.results['polarizability'] = self.results['polarizability'].reshape(-1, 3)
           
         self._update_system(system)
 
     def _generate_input(self, system: System) -> Dict[str, torch.Tensor]:
-        """
-        Function to extracts neighbor lists, atom_types, positions e.t.c. from the system and generate a properly
-        formatted input for the schnetpack model.
-
-        Args:
-            system (schnetpack.md.System): System object containing current state of the simulation.
-
-        Returns:
-            dict(torch.Tensor): Schnetpack inputs in dictionary format.
-        """
-        inputs={}
+        inputs = {}
         inputs_list = self._get_system_molecules(system)
-        for key,value in inputs_list.items():
-            inputs[key]=value.to(self.device)
+        for key, value in inputs_list.items():
+            inputs[key] = value.to(self.device)
 
         neighbors = self.neighbor_list.get_neighbors(inputs)
         inputs.update(neighbors)
         return inputs
-
 
 

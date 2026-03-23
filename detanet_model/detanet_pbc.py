@@ -357,7 +357,7 @@ class DetaNet(nn.Module):
             if self.grad == 'stress':
                 # TorchScript 兼容的 zeros + requires_grad 写法
                 strain = torch.zeros([box.shape[0], 3, 3], dtype=box.dtype, device=box.device).requires_grad_()
-                cell = box @ (torch.eye(3, dtype=box.dtype, device=box.device)[None, :, :] + strain)
+                box = box @ (torch.eye(3, dtype=box.dtype, device=box.device)[None, :, :] + strain)
 
 
 
@@ -418,7 +418,7 @@ class DetaNet(nn.Module):
             out=self.cal_3_p_tensor(z=z,pos=pos,batch=batch,outs=outs,outt=outt)
 
         elif self.out_type == 'stress':
-            out=self.cal_stress_tensor(cell=cell,outs=outs,pos=pos,outt=outt,batch=batch)
+            out=self.cal_stress_tensor(box=box,outs=outs,pos=pos,outt=outt,batch=batch)
 
         elif self.out_type=='latent':
             out=S,T
@@ -464,7 +464,7 @@ class DetaNet(nn.Module):
             out=self.grad_hess_ii(energy=out,posa=posa,posb=posb)
 
         elif self.grad=='stress':
-            out=self.grad_stress(energy=out,strain=strain, cell=cell,batch=batch)
+            out=self.grad_stress(energy=out,strain=strain, box=box,batch=batch)
 
         #Calculation of sums of squares of properties (dipole moments)
         if self.norm:
